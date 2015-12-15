@@ -8,6 +8,8 @@ import fi.jmak.utils.gameUtils.camera.Camera;
 public class Transform
 {
 	private static Camera camera;
+
+	private static Mat4f projection;
 	
 	private Vec3f translation;
 	private Vec3f scale;
@@ -51,4 +53,9 @@ public class Transform
 	public Vec3f getTranslation() { return translation; }
 	public Vec3f getScale() { return scale; }
 	public Quatf getRotation() { return rot; }
+	
+	public static void setProjection(Mat4f projection)
+	{
+		Transform.projection = projection;
+	}
 }
