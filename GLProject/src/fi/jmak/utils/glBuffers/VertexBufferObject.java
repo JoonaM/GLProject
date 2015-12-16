@@ -19,6 +19,11 @@ public class VertexBufferObject
 		GL15.glBindBuffer(target, vbo);
 	}
 	
+	public void bind()
+	{
+		GL15.glBindBuffer(target, vbo);
+	}
+	
 	public void unbind(int target)
 	{
 		GL15.glBindBuffer(target, 0);

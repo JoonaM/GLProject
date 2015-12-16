@@ -1,10 +1,15 @@
 package fi.jmak.utils.gameUtils.camera;
 
+import fi.jmak.math.matrix.Mat4f;
 import fi.jmak.math.quaternion.Quatf;
 import fi.jmak.math.vector.Vec3f;
 
 public class Camera
 {
+	private Mat4f projection;
+	private Mat4f cameraTransMat;
+	private Mat4f orienMat;
+	
 	private Vec3f translation;
 	private Quatf orientation;
 	
@@ -12,6 +17,9 @@ public class Camera
 	{
 		this.translation = translation;
 		this.orientation = orientation;
+		
+		cameraTransMat = new Mat4f();
+		orienMat = new Mat4f();
 	}
 	
 	public Camera(Vec3f translation)
@@ -60,9 +68,27 @@ public class Camera
 	{
 		return orientation;
 	}
+
+	public void setProjection(Mat4f projection)
+	{
+		this.projection = projection;
+	}
 	
+	public void transform()
+	{
+		cameraTransMat = cameraTransMat.translation(translation.mul(-1));
+		orienMat = orienMat.rotation(orientation.conjugate());
+		
+		cameraTransMat = orienMat.mul(cameraTransMat);
+	}
 	
-	
-	
-	
+	public Mat4f getTransform()
+	{
+		return cameraTransMat;
+	}
+
+	public Mat4f getProjection()
+	{
+		return projection;
+	}	
 }

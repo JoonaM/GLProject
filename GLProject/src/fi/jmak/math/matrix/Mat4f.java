@@ -106,9 +106,9 @@ public class Mat4f
 		return this;
 	}
 	
-	public Mat4f perspective(float fov, float aspect, float near, float far)
+	public Mat4f perspective(float fovDeg, float aspect, float near, float far)
 	{
-		float tan = (float) Math.tan(Math.toRadians(fov / 2));
+		float tan = (float) Math.tan(Math.toRadians(fovDeg / 2));
 		float range = far - near;
 		
 		m[0][0] = 1 / (tan * aspect);	m[0][1] = 0;		m[0][2] = 0;						m[0][3] = 0;
@@ -117,6 +117,25 @@ public class Mat4f
 		m[3][0] = 0;					m[3][1] = 0;		m[3][2] = 1;						m[3][3] = 0;
 		
 		return this;
+	}
+	
+	public Mat4f screenSpaceTransform(float halfWidth, float halfHeight)
+	{
+		m[0][0] = halfWidth;	m[0][1] = 0;			m[0][2] = 0;	m[0][3] = halfWidth;
+		m[1][0] = 0;			m[1][1] = -halfHeight;	m[1][2] = 0;	m[1][3] = halfHeight;
+		m[2][0] = 0;			m[2][1] = 0;			m[2][2] = 1;	m[2][3] = 0;
+		m[3][0] = 0;			m[3][1] = 0;			m[3][2] = 0;	m[3][3] = 1;
+
+		return this;
+	}
+	
+	public Vec3f toVec3f(Vec3f by)
+	{
+		return new Vec3f(
+				m[0][0] * by.getX() + m[0][1] * by.getY() + m[0][2] * by.getZ() + m[0][3],
+				m[1][0] * by.getX() + m[1][1] * by.getY() + m[1][2] * by.getZ() + m[1][3],
+				m[2][0] * by.getX() + m[2][1] * by.getY() + m[2][2] * by.getZ() + m[2][3]
+				);
 	}
 	
 	public void set(int x, int y, float val)

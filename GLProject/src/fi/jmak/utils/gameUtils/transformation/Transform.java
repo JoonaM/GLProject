@@ -9,8 +9,6 @@ public class Transform
 {
 	private static Camera camera;
 
-	private static Mat4f projection;
-	
 	private Vec3f translation;
 	private Vec3f scale;
 	private Quatf rot;
@@ -18,6 +16,8 @@ public class Transform
 	private Mat4f rotMat;
 	private Mat4f transMat;
 	private Mat4f scaleMat;
+
+	private Mat4f transform;
 	
 	public Transform()
 	{
@@ -30,19 +30,20 @@ public class Transform
 		rotMat	 	= new Mat4f();
 	}
 	
-	public Mat4f transform()
+	public Mat4f doTransform()
 	{
 		transMat = transMat.translation(translation);
 		scaleMat = scaleMat.scale(scale);
 		rotMat 	 = rotMat.rotation(rot);
 		
-		Mat4f camTMat = new Mat4f().translation(camera.getTranslation().mul(-1));
-		Mat4f camOMat = new Mat4f().rotation(camera.getOrientation().conjugate());
+		transform = camera.getProjection().mul(camera.getTransform().mul(transMat.mul(rotMat.mul(scaleMat))));
 		
-		Mat4f camTrans = camOMat.mul(camTMat);
-		
-		return camTrans.mul(transMat.mul(rotMat.mul(scaleMat)));
-		
+		return transform;
+	}
+	
+	public Mat4f getTransform()
+	{
+		return transform;
 	}
 	
 	public static void setCamera(Camera camera)
@@ -50,12 +51,13 @@ public class Transform
 		Transform.camera = camera;
 	}
 	
+	public static Camera getCamera()
+	{
+		return camera;
+	}
+	
 	public Vec3f getTranslation() { return translation; }
 	public Vec3f getScale() { return scale; }
 	public Quatf getRotation() { return rot; }
 	
-	public static void setProjection(Mat4f projection)
-	{
-		Transform.projection = projection;
-	}
 }

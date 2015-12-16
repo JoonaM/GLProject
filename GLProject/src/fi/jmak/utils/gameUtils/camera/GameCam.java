@@ -50,6 +50,11 @@ public class GameCam
 		}
 		
 		float speed = delta * 10;	
+		if (keys.down(GLFW.GLFW_KEY_LEFT_SHIFT))
+		{
+			speed = delta;
+
+		}
 		if (keys.down(GLFW.GLFW_KEY_A))
 		{
 			camera.translate(camera.getOrientation().left().mul(speed));
@@ -85,14 +90,7 @@ public class GameCam
 			camera.rotateLocal(new Vec3f(1, 0, 0), mouseMove.getY() * rotSpeed);
 		}
 		
-//		if (keys.down(GLFW.GLFW_KEY_UP))
-//		{
-//		}
-//		if (keys.down(GLFW.GLFW_KEY_DOWN))
-//		{
-//			camera.rotateLocal(new Vec3f(1, 0, 0), rotSpeed);
-//		}
-
+		camera.transform();
 	}
 	
 	public Camera getCamera()

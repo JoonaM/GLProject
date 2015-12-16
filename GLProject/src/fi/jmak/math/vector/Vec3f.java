@@ -59,6 +59,11 @@ public class Vec3f
 		return new Vec3f(_x, _y, _z);
 	}
 	
+	public Vec3f perspectiveDivide()
+	{
+		return new Vec3f(x / z, y / z, 1);
+	}
+	
 	public Vec3f add(Vec3f v) { return new Vec3f(x + v.x, y + v.y, z + v.z); }
 	public Vec3f add(float x, float y, float z) { return new Vec3f(this.x + x, this.y + y, this.z + z); }
 	public Vec3f add(float v) { return new Vec3f(x + v, y + v, z + v); }
@@ -78,6 +83,16 @@ public class Vec3f
 	public float getX() { return x; }
 	public float getY() { return y; }
 	public float getZ() { return z; }
+	
+	public Vec2f getXY() { return new Vec2f(x, y); }
+	public Vec2f getYX() { return new Vec2f(y, x); }
+	
+	public Vec2f getYZ() { return new Vec2f(y, z); }
+	public Vec2f getZY() { return new Vec2f(z, y); }
+	
+	public Vec2f getXZ() { return new Vec2f(x, z); }
+	public Vec2f getZX() { return new Vec2f(z, x); }
+	
 	public void setX(int x) { this.x = x; }
 	public void setY(int y) { this.y = y; }
 	public void setZ(int z) { this.z = z; }
@@ -89,7 +104,7 @@ public class Vec3f
 	
 	public String toString()
 	{
-		return "[" + x + "] [" + y + "]";
+		return "[" + x + "] [" + y + "] [" + z + "]";
 	}
 	
 }

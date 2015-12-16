@@ -1,6 +1,8 @@
 package fi.jmak.utils.flippedBuffer;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
@@ -18,6 +20,15 @@ public class FlippedBuffer
 		return buf;
 	}
 
+	public static IntBuffer ibuffer(int[] vals)
+	{
+		IntBuffer buf = BufferUtils.createIntBuffer(vals.length);
+		buf.put(vals);
+		buf.flip();
+		
+		return buf;
+	}
+	
 	public static FloatBuffer mat4fBuffer(Mat4f matrix, boolean transpose)
 	{
 		if (transpose)
@@ -59,4 +70,5 @@ public class FlippedBuffer
 		
 		return ret;		
 	}
+
 }
