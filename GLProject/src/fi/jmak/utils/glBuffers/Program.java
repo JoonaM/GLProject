@@ -27,6 +27,14 @@ public class Program
 		this(vertexPath, null, null, null, fragmentPath);
 	}
 	
+
+	public static void setGeneralPath(Class<?> root, String generalPath)
+	{
+		String rootPath = root.getProtectionDomain().getCodeSource().getLocation().getPath();	
+		
+		setGeneralPath(rootPath + generalPath);
+	}
+	
 	public static void setGeneralPath(String generalPath)
 	{
 		Program.generalPath = generalPath;

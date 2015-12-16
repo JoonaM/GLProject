@@ -24,7 +24,7 @@ public class VertexBufferObject
 		GL15.glBindBuffer(target, vbo);
 	}
 	
-	public void unbind(int target)
+	public void unbind()
 	{
 		GL15.glBindBuffer(target, 0);
 	}
