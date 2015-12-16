@@ -13,20 +13,27 @@ public class Texture
 	{
 		texture = GL11.glGenTextures();
 	}
-	
-	public void use(int target, ByteBuffer buffer, int width, int height)
+
+	public void use(int target, ByteBuffer buffer, int width, int height, boolean customParams)
 	{
 		bind(target);
 		
-		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-		
-		GL11.glTexParameterf(target, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameterf(target, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-		
+		if (!customParams)
+		{
+			GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+			GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+			
+			GL11.glTexParameterf(target, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameterf(target, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		}
+
 		GL11.glTexImage2D(target, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		
 		unbind();
+	}
+	public void use(int target, ByteBuffer buffer, int width, int height)
+	{
+		use(target, buffer, width, height, false);
 	}
 	
 	public int get()
@@ -51,5 +58,10 @@ public class Texture
 	public void delete()
 	{
 		GL11.glDeleteTextures(texture);
+	}
+
+	public int target()
+	{
+		return target;
 	}
 }

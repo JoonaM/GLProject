@@ -1,5 +1,7 @@
 package fi.jmak.math.vector;
 
+import fi.jmak.utils.Utils;
+
 public class Vec3f
 {
 	private float x, y, z;
@@ -97,6 +99,12 @@ public class Vec3f
 	public void setY(int y) { this.y = y; }
 	public void setZ(int z) { this.z = z; }
 	
+	public static void lerpf(Vec3f to, Vec3f v0, Vec3f v1, float t)
+	{
+		to.x = Utils.lerpf(v0.getX(), v1.getX(), t);
+		to.y = Utils.lerpf(v0.getY(), v1.getY(), t);
+		to.z = Utils.lerpf(v0.getZ(), v1.getZ(), t);
+	}
 	public boolean isNull()
 	{
 		return (x + y + z) == 0;

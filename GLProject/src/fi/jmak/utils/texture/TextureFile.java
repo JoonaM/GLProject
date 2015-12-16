@@ -14,9 +14,8 @@ public class TextureFile
 	
 	private static int width, height;
 	
-	public static ByteBuffer loadRGBA(String path, boolean flipx, boolean flipy) throws IOException
+	public static ByteBuffer loadRGBA(BufferedImage img, boolean flipx, boolean flipy) throws IOException
 	{
-		BufferedImage img = ImageIO.read(new File(path));
 		width = img.getWidth();
 		height = img.getHeight();
 		int[] rgb = img.getRGB(0, 0, width, height, null, 0, width);
@@ -65,9 +64,17 @@ public class TextureFile
 		}
 		buffer.flip();
 		
+		return buffer;	
+	}
+	
+	public static ByteBuffer loadRGBA(String path, boolean flipx, boolean flipy) throws IOException
+	{
+		BufferedImage img = ImageIO.read(new File(path));
+		
+		ByteBuffer ret = loadRGBA(img, flipx, flipy);
 		img = null;
 		
-		return buffer;
+		return ret;
 	}
 	
 	public static int getWidth()
