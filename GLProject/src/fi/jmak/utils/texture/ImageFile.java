@@ -19,7 +19,19 @@ public class ImageFile
 	}
 	
 	public void colorToAlpha(Color ... colors)
-	{
+	{	
+		
+		if (!img.getColorModel().hasAlpha())
+		{	
+			BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			temp.setRGB(
+					0, 0,
+					img.getWidth(), img.getHeight(),
+					img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth()),
+					0, img.getWidth());
+	
+			img = temp;
+		}
 		int[] rgb = img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth());
 		
 		for (int x = 0; x < img.getWidth(); x++)
@@ -28,14 +40,13 @@ public class ImageFile
 			{
 				int index = x + y * img.getWidth();
 				for (int i = 0; i < colors.length; i++)
-				{
+				{	
 					if (colors[i].getRGB() == rgb[index])
 					{
-						int curRGB = (colors[i].getRGB() << 8);
-						int newRGB = (0x00 << 24) | (curRGB << 16);
-						
-						img.setRGB(x, y, newRGB);
-						
+						int col = colors[i].getRGB();
+						col = ((col << 8) >>> 8);	
+
+						img.setRGB(x, y, col);	
 					}
 				}
 			}

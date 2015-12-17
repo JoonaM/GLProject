@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 
 import fi.jmak.math.matrix.Mat4f;
+import fi.jmak.math.vector.Vec3f;
 
 public class FlippedBuffer
 {
@@ -28,6 +29,16 @@ public class FlippedBuffer
 		
 		return buf;
 	}
+	
+	public static FloatBuffer vec3fBuffer(Vec3f vec)
+	{
+		FloatBuffer buf = BufferUtils.createFloatBuffer(3);
+		buf.put(vec.getX()).put(vec.getY()).put(vec.getZ());
+		buf.flip();
+		
+		return buf;
+	}
+
 	
 	public static FloatBuffer mat4fBuffer(Mat4f matrix, boolean transpose)
 	{

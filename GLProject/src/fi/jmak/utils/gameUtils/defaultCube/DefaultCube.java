@@ -4,8 +4,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
+import fi.jmak.camera.Camera;
 import fi.jmak.utils.flippedBuffer.FlippedBuffer;
-import fi.jmak.utils.gameUtils.camera.GameCam;
 import fi.jmak.utils.gameUtils.transformation.Transform;
 import fi.jmak.utils.glBuffers.Program;
 import fi.jmak.utils.glBuffers.VertexArrayObject;
@@ -26,7 +26,7 @@ public class DefaultCube
 	public DefaultCube()
 	{
 		transform = new Transform();
-		Transform.setCamera(GLWindow.getGameCam().getCamera());
+		Transform.setCamera(Camera.getMain());
 		Program.setGeneralPath(
 				DefaultCube.class.getProtectionDomain().getCodeSource().getLocation().getPath() 
 				+ "fi/jmak/utils/gameUtils/defaultCube/");

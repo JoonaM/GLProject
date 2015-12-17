@@ -1,9 +1,9 @@
 package fi.jmak.utils.gameUtils.transformation;
 
+import fi.jmak.camera.Camera;
 import fi.jmak.math.matrix.Mat4f;
 import fi.jmak.math.quaternion.Quatf;
 import fi.jmak.math.vector.Vec3f;
-import fi.jmak.utils.gameUtils.camera.Camera;
 
 public class Transform
 {

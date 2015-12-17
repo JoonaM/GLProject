@@ -1,16 +1,16 @@
 package fi.jmak.window;
 
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+import fi.jmak.camera.Camera;
 import fi.jmak.input.Keyboard;
 import fi.jmak.input.Mouse;
 import fi.jmak.math.matrix.Mat4f;
-import fi.jmak.utils.gameUtils.camera.Camera;
-import fi.jmak.utils.gameUtils.camera.GameCam;
+import fi.jmak.utils.gameUtils.camera.CameraControls;
 import fi.jmak.utils.gameUtils.transformation.Transform;
 
 public class GLWindow
@@ -26,7 +26,7 @@ public class GLWindow
 	private static boolean escapeTerminates;
 	private static Keyboard keys;
 	private static Mouse mouse;
-	private static GameCam gameCam;
+	private static CameraControls camControls;
 	
 	public GLWindow(int width, int height, String title)
 	{
@@ -84,6 +84,7 @@ public class GLWindow
 		if (window == NULL)
 			throw new RuntimeException("Could not create window!");
 		
+		
 		GLFW.glfwMakeContextCurrent(window);
 		
 		GLFW.glfwShowWindow(window);
@@ -97,12 +98,17 @@ public class GLWindow
 	private void initBasics()
 	{
 		setEscapeTerminates(true);
+		
 		keys = new Keyboard(window);
 		mouse = new Mouse(window);
-		gameCam = new GameCam(new Camera(0, 0, -3), 1.0f, width, height);
-		gameCam.getCamera().setProjection(new Mat4f().perspective(45.0f, width / (float) height, 0.01f, 500.0f));
-		Transform.setCamera(GLWindow.getGameCam().getCamera());
 		
+		Camera mainCamera = new Camera(0, 0, -3);
+		Camera.setMain(mainCamera);
+		mainCamera.setProjection(new Mat4f().perspective(45.0f, width / (float) height, 0.01f, 500.0f));
+		
+		Transform.setCamera(mainCamera);
+		
+		camControls = new CameraControls(mainCamera, 1.0f, width, height);
 	}
 	
 	private void loop(boolean initBasics)
@@ -134,8 +140,8 @@ public class GLWindow
 				if (mouse != null)
 					mouse.tick();
 				
-				if (gameCam != null)
-					gameCam.tick(keys, mouse, delta);
+				if (camControls != null)
+					camControls.tick(keys, mouse, delta);
 				
 				if (escapeTerminates)
 					if (keys.hit(GLFW.GLFW_KEY_ESCAPE))
@@ -167,9 +173,9 @@ public class GLWindow
 		GLFW.glfwDestroyWindow(window);
 	}
 	
-	public static GameCam getGameCam()
+	public static CameraControls getCameraControls()
 	{
-		return gameCam;
+		return camControls;
 	}
 	
 	public static Keyboard getKeyboard()

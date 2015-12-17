@@ -56,9 +56,9 @@ public class TextureFile
 				byte g = (byte) ((rgb[index] >>  8) & 0xff);
 				byte b = (byte) ((rgb[index]	  ) & 0xff);
 				
-				if (hasAlpha)
-					a = (byte) 	(rgb[index >> 24] & 0xff);
-				
+				if (hasAlpha)	
+					a = (byte) 	((rgb[index] >> 24) & 0xff);
+
 				buffer.put(r).put(g).put(b).put(a);
 			}
 		}

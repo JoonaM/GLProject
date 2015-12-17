@@ -1,4 +1,4 @@
-package fi.jmak.utils.gameUtils.camera;
+package fi.jmak.camera;
 
 import fi.jmak.math.matrix.Mat4f;
 import fi.jmak.math.quaternion.Quatf;
@@ -6,6 +6,8 @@ import fi.jmak.math.vector.Vec3f;
 
 public class Camera
 {
+	private static Camera main;
+	
 	private Mat4f projection;
 	private Mat4f cameraTransMat;
 	private Mat4f orienMat;
@@ -90,5 +92,14 @@ public class Camera
 	public Mat4f getProjection()
 	{
 		return projection;
+	}
+
+	public static void setMain(Camera mainCamera)
+	{
+		main = mainCamera;
 	}	
+	public static Camera getMain()
+	{
+		return main;
+	}
 }
