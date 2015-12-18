@@ -7,6 +7,14 @@ public class Vec3f
 	private float x, y, z;
 	
 	public Vec3f() { x = 0; y = 0; z = 0; }
+	
+	public Vec3f(Vec3f copy)
+	{
+		this.x = copy.x;
+		this.y = copy.y;
+		this.z = copy.z;
+	}
+	
 	public Vec3f(float x, float y, float z)
 	{
 		this.x = x;
@@ -113,6 +121,23 @@ public class Vec3f
 	public String toString()
 	{
 		return "[" + x + "] [" + y + "] [" + z + "]";
+	}
+	
+	public static Vec3f getMaxComponents(Vec3f f, Vec3f s)
+	{
+		return new Vec3f(
+				Math.max(f.getX(), s.getX()),
+				Math.max(f.getY(), s.getY()),
+				Math.max(f.getZ(), s.getZ())
+				);
+	}
+	public static Vec3f getMinComponents(Vec3f f, Vec3f s)
+	{
+		return new Vec3f(
+				Math.min(f.getX(), s.getX()),
+				Math.min(f.getY(), s.getY()),
+				Math.min(f.getZ(), s.getZ())
+				);
 	}
 	
 }

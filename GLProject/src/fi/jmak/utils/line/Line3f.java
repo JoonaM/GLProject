@@ -1,5 +1,6 @@
 package fi.jmak.utils.line;
 
+import java.awt.Color;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -36,6 +37,8 @@ public class Line3f
 
 	private static Mat4f transform;
 
+	private static float color;
+
 	private Line3f()
 	{
 		String root = Line3f.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -52,20 +55,33 @@ public class Line3f
 			
 			maxLineAmt  = 1024;
 			lineAmt		= 0;
-			vertexBuffer = BufferUtils.createFloatBuffer(3 * maxLineAmt);
+			vertexBuffer = BufferUtils.createFloatBuffer((3 + 1) * maxLineAmt);
 			
 			GL15.glBufferData(vbo.target(), vertexBuffer.capacity() * Float.BYTES, GL15.GL_DYNAMIC_DRAW);
 			
-			GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+			GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, (3 + 1) * Float.BYTES, 0);
+			GL20.glVertexAttribPointer(1, 1, GL11.GL_FLOAT, false, (3 + 1) * Float.BYTES, 3 * Float.BYTES);
 			GL20.glEnableVertexAttribArray(0);
+			GL20.glEnableVertexAttribArray(1);
 			
 		}
 		vao.unbind();
+
 	}
+	
 	
 	public static void setTransform(Mat4f transform)
 	{
 		Line3f.transform = transform;
+	}
+
+	public static void setColor(Color col)
+	{
+		Line3f.color = packColor(col);
+	}
+
+	private static float packColor(Color color) {
+	    return color.getRed() + color.getGreen() * 256.0f + color.getBlue() * 256.0f * 256.0f;
 	}
 	
 	public static void draw(Vec3f v0, Vec3f v1)
@@ -81,7 +97,10 @@ public class Line3f
 //		vbo.bind(GL15.GL_ARRAY_BUFFER);
 
 		vertexBuffer.put(x0).put(y0).put(z0);
+		vertexBuffer.put(color);
 		vertexBuffer.put(x1).put(y1).put(z1);
+		vertexBuffer.put(color);
+		
 		lineAmt += 2;
 		
 		GL30.glBindVertexArray(prevVao);
@@ -90,6 +109,7 @@ public class Line3f
 	
 	public static void render()
 	{
+
 		vao.bind();
 		vbo.bind(GL15.GL_ARRAY_BUFFER);
 		program.bind();

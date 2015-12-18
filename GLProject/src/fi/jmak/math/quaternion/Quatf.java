@@ -136,7 +136,7 @@ public class Quatf
 		return (float) Math.sqrt(x * x + y * y + z * z + w * w);
 	}
 	
-	public Quatf lookAt(Vec3f pos, Vec3f target, Vec3f up)
+	public static Quatf lookAt(Vec3f pos, Vec3f target, Vec3f up)
 	{
 		Vec3f dir = pos.sub(target).normalized();
 		Vec3f right = up.cross(dir).normalized();

@@ -18,6 +18,8 @@ public class Transform
 	private Mat4f scaleMat;
 
 	private Mat4f transform;
+
+	private Mat4f objTransMat;
 	
 	public Transform()
 	{
@@ -36,9 +38,20 @@ public class Transform
 		scaleMat = scaleMat.scale(scale);
 		rotMat 	 = rotMat.rotation(rot);
 		
-		transform = camera.getProjection().mul(camera.getTransform().mul(transMat.mul(rotMat.mul(scaleMat))));
+		objTransMat = transMat.mul(rotMat.mul(scaleMat));
+		transform = camera.getProjection().mul(camera.getTransform().mul(objTransMat));
 		
 		return transform;
+	}
+	
+	public Mat4f getRotMat()
+	{
+		return rotMat;
+	}
+	
+	public Mat4f getObjTransMat()
+	{
+		return objTransMat;
 	}
 	
 	public Mat4f getTransform()

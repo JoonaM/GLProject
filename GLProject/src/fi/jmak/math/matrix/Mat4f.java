@@ -129,7 +129,7 @@ public class Mat4f
 		return this;
 	}
 	
-	public Vec3f toVec3f(Vec3f by)
+	public Vec3f mul(Vec3f by)
 	{
 		return new Vec3f(
 				m[0][0] * by.getX() + m[0][1] * by.getY() + m[0][2] * by.getZ() + m[0][3],
