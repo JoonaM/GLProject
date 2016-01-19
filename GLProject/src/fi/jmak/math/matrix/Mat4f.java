@@ -22,6 +22,20 @@ public class Mat4f
 		return this;
 	}
 	
+	public static Mat4f transpose(Mat4f mat)
+	{
+		Mat4f ret = new Mat4f();
+		float[][] m = ret.get();
+		float[][] n = mat.get();
+		
+		m[0][0] = n[0][0];	m[0][1] = n[1][0];	m[0][2] = n[2][0];	m[0][3] = n[3][0];
+		m[1][0] = n[0][1];	m[1][1] = n[1][1];	m[1][2] = n[2][1];	m[1][3] = n[3][1];
+		m[2][0] = n[0][2];	m[2][1] = n[1][2];	m[2][2] = n[2][2];	m[2][3] = n[3][2];
+		m[3][0] = n[0][3];	m[3][1] = n[1][3];	m[3][2] = n[2][3];	m[3][3] = n[3][3];
+
+		return ret;
+	}
+	
 	public Mat4f translation(Vec3f v)
 	{
 		return translation(v.getX(), v.getY(), v.getZ());
@@ -92,7 +106,7 @@ public class Mat4f
 		return this;
 	}
 	
-	public Mat4f orthographic(float left, float right, float top, float bottom, float near, float far)
+	public Mat4f orthographic(float left, float right, float bottom, float top, float near, float far)
 	{
 		float width  = right - left;
 		float height = top 	 - bottom;
@@ -128,6 +142,30 @@ public class Mat4f
 
 		return this;
 	}
+
+	public static Mat4f invertRot(Mat4f mat)
+	{
+		Mat4f ret = new Mat4f();
+		ret.set(mat);
+		
+		ret.m[3][0] = 0;	ret.m[3][1] = 0;	ret.m[3][2] = 0;	ret.m[3][3] = 1;
+		ret.m[0][3] = 0;	ret.m[1][3] = 0;	ret.m[2][3] = 0;
+		
+		return Mat4f.transpose(ret);
+	}
+	
+	public static Mat4f invertTrans(Mat4f mat)
+	{
+		Mat4f ret = new Mat4f();
+		float[][] m = ret.get();
+		
+		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = -mat.m[0][3];
+		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = -mat.m[1][3];
+		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = 1;	m[2][3] = -mat.m[2][3];
+		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
+		
+		return ret;
+	}
 	
 	public Vec3f mul(Vec3f by)
 	{
@@ -136,6 +174,17 @@ public class Mat4f
 				m[1][0] * by.getX() + m[1][1] * by.getY() + m[1][2] * by.getZ() + m[1][3],
 				m[2][0] * by.getX() + m[2][1] * by.getY() + m[2][2] * by.getZ() + m[2][3]
 				);
+	}
+	
+	public void set(Mat4f matrix)
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			for (int y = 0; y < 4; y++)
+			{
+				m[x][y] = matrix.m[x][y];
+			}
+		}
 	}
 	
 	public void set(int x, int y, float val)
@@ -171,4 +220,11 @@ public class Mat4f
 		return ret;
 	}
 
+	public static Mat4f viewTransform(Vec3f translation, Quatf orientation)
+	{
+		Mat4f orientationMat = new Mat4f().rotation(orientation.conjugate());
+		Mat4f translationMat = new Mat4f().translation(translation.opposite());
+		
+		 return orientationMat.mul(translationMat);
+	}
 }

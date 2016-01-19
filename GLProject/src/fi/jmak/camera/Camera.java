@@ -9,18 +9,23 @@ public class Camera
 	private static Camera main;
 	
 	private Mat4f projection;
-	private Mat4f cameraTransMat;
+	private Mat4f transformation;
 	private Mat4f orienMat;
 	
 	private Vec3f translation;
 	private Quatf orientation;
+
+	private float fov;
+	private float aspect;
+	private float near;
+	private float far;
 	
 	public Camera(Vec3f translation, Quatf orientation)
 	{
 		this.translation = translation;
 		this.orientation = orientation;
 		
-		cameraTransMat = new Mat4f();
+		transformation = new Mat4f();
 		orienMat = new Mat4f();
 	}
 	
@@ -37,6 +42,23 @@ public class Camera
 	public Camera()
 	{
 		this(new Vec3f(0, 0, 0));
+	}
+	
+	public float getFOV()
+	{
+		return fov;
+	}
+	public float getAspect()
+	{
+		return aspect;
+	}
+	public float getNear()
+	{
+		return near;
+	}
+	public float getFar()
+	{
+		return far;
 	}
 	
 	public void translate(Vec3f trans)
@@ -71,27 +93,40 @@ public class Camera
 		return orientation;
 	}
 
-	public void setProjection(Mat4f projection)
+	public void setProjection(float fov, float aspect, float near, float far)
 	{
-		this.projection = projection;
+		this.fov = fov;
+		this.aspect = aspect;
+		this.near = near;
+		this.far = far;
+		
+		this.projection = new Mat4f().perspective(fov, aspect, near, far);
 	}
 	
-	public void transform()
+	public Mat4f transform()
 	{
-		cameraTransMat = cameraTransMat.translation(translation.mul(-1));
+		transformation = transformation.translation(translation.mul(-1));
 		orienMat = orienMat.rotation(orientation.conjugate());
 		
-		cameraTransMat = orienMat.mul(cameraTransMat);
+		transformation = orienMat.mul(transformation);
+		
+		return transformation;
 	}
 	
 	public Mat4f getTransform()
 	{
-		return cameraTransMat;
+		return transformation;
 	}
 
 	public Mat4f getProjection()
 	{
 		return projection;
+	}
+	
+	public void lookAt(Vec3f translation, Vec3f target, Vec3f up)
+	{
+		this.translation	= translation;
+		this.orientation 	= Quatf.lookAt(translation, target, up);
 	}
 
 	public static void setMain(Camera mainCamera)

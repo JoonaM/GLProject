@@ -9,9 +9,8 @@ import org.lwjgl.opengl.GL11;
 import fi.jmak.camera.Camera;
 import fi.jmak.input.Keyboard;
 import fi.jmak.input.Mouse;
-import fi.jmak.math.matrix.Mat4f;
+import fi.jmak.transformation.Transform;
 import fi.jmak.utils.gameUtils.camera.CameraControls;
-import fi.jmak.utils.gameUtils.transformation.Transform;
 
 public class GLWindow
 {
@@ -104,11 +103,19 @@ public class GLWindow
 		
 		Camera mainCamera = new Camera(0, 0, -3);
 		Camera.setMain(mainCamera);
-		mainCamera.setProjection(new Mat4f().perspective(45.0f, width / (float) height, 0.01f, 500.0f));
+		mainCamera.setProjection(45, width / (float) height, 0.01f, 500.0f);
 		
 		Transform.setCamera(mainCamera);
 		
 		camControls = new CameraControls(mainCamera, 1.0f, width, height);
+		
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glClearColor(0, 0, 0, 1);
+	}
+	
+	public void cls()
+	{
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	private void loop(boolean initBasics)

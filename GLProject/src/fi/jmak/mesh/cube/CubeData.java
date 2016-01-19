@@ -1,22 +1,28 @@
-package fi.jmak.shapes;
+package fi.jmak.mesh.cube;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import fi.jmak.math.vector.Vec3f;
 
 public class CubeData
 {
 	private static CubeData instance;
 	
 	private float[] data;
-
+	
 	private int vertices;
 
+	private static final float size = 0.5f;
+	private static float left   = -size;
+	private static float right  =  size;
+	private static float up		=  size;
+	private static float down	= -size;
+	private static float near	= -size;
+	private static float far	=  size;
+	
 	private CubeData()
 	{
-		float size 	= 0.5f;
-		float left  = -size;
-		float right =  size;
-		float up	=  size;
-		float down	= -size;
-		float near	= -size;
-		float far	=  size;
 		
 		data = new float[] {
 			//position				//texture	//normal
@@ -68,11 +74,31 @@ public class CubeData
 			right,	up,		near,   0, 0,		1, 0, 0,
 			right,	down,	far,    1, 1,		1, 0, 0,
 			right,	up,		far,    1, 0,		1, 0, 0
-			
-			
 		};
-		
+
 		vertices = data.length / (3 + 2 + 3);
+	}
+	
+	public static List<Vec3f> getCollPoints()
+	{
+		List<Vec3f> points = new ArrayList<Vec3f>();
+		
+		points.add(new Vec3f(left,	up,		far));
+		points.add(new Vec3f(left,	down,	far));
+		points.add(new Vec3f(right, down,	far));
+		points.add(new Vec3f(right,	up,		far));
+		
+		points.add(new Vec3f(left,	up,		near));
+		points.add(new Vec3f(left,	down,	near));
+		points.add(new Vec3f(right, down,	near));
+		points.add(new Vec3f(right,	up,		near));
+		
+		return points;
+	}
+	
+	public float getSize()
+	{
+		return size;
 	}
 	
 	public static float[] get()

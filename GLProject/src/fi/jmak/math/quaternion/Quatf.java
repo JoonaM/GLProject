@@ -137,10 +137,14 @@ public class Quatf
 	}
 	
 	public static Quatf lookAt(Vec3f pos, Vec3f target, Vec3f up)
-	{
-		Vec3f dir = pos.sub(target).normalized();
-		Vec3f right = up.cross(dir).normalized();
-		up = dir.cross(right).normalized();
+	{	
+		Vec3f dir	= target.sub(pos);
+		Vec3f right	= up.cross(dir);
+			  up	= dir.cross(right);
+		
+		dir.normalize();
+		right.normalize();
+		up.normalize();
 		
 		Mat4f rotMat = new Mat4f().rotation(dir, right, up);
 		
@@ -193,5 +197,10 @@ public class Quatf
 		y /= length;
 		z /= length;
 		w /= length;
+	}
+	
+	public String toString()
+	{
+		return x + " " + y + " " + z + " " + w;
 	}
 }

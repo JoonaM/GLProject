@@ -16,11 +16,15 @@ public class VertexBufferObject
 	public void bind(int target)
 	{
 		this.target = target;
-		GL15.glBindBuffer(target, vbo);
+		
+		bind();
 	}
 	
 	public void bind()
 	{
+		if (target == 0)
+			System.err.println("Warning: VertexBufferObject bound to 0");
+		
 		GL15.glBindBuffer(target, vbo);
 	}
 	
@@ -34,14 +38,15 @@ public class VertexBufferObject
 		return vbo;
 	}
 	
-	public void delete()
-	{
-		GL15.glDeleteBuffers(vbo);
-	}
 
 	public int target()
 	{
 		return target;	
+	}
+	
+	public void delete()
+	{
+		GL15.glDeleteBuffers(vbo);
 	}
 
 }

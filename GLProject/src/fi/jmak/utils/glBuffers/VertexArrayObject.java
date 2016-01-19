@@ -7,7 +7,7 @@ public class VertexArrayObject
 	private int vao;
 
 	public VertexArrayObject()
-	{
+	{	
 		vao = GL30.glGenVertexArrays();
 	}
 	

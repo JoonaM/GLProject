@@ -1,5 +1,7 @@
 package fi.jmak.math.vector;
 
+import java.util.Random;
+
 import fi.jmak.utils.Utils;
 
 public class Vec3f
@@ -34,12 +36,22 @@ public class Vec3f
 		this.y = v.y;
 		this.z = v.z;
 	}
-	
 	public float length()
 	{
 		return (float) Math.sqrt(x * x + y * y + z * z);
 	}
 	
+	public float lengthSquared()
+	{
+		return x * x + y * y + z * z;		
+	}
+	
+	public Vec3f length(float f)
+	{
+		normalize();
+		return mul(f);
+	}
+		
 	public Vec3f normalized()
 	{
 		float l = length();
@@ -68,12 +80,12 @@ public class Vec3f
 		
 		return new Vec3f(_x, _y, _z);
 	}
-	
-	public Vec3f perspectiveDivide()
+
+	public Vec3f opposite()
 	{
-		return new Vec3f(x / z, y / z, 1);
+		return new Vec3f(-x, -y, -z);
 	}
-	
+
 	public Vec3f add(Vec3f v) { return new Vec3f(x + v.x, y + v.y, z + v.z); }
 	public Vec3f add(float x, float y, float z) { return new Vec3f(this.x + x, this.y + y, this.z + z); }
 	public Vec3f add(float v) { return new Vec3f(x + v, y + v, z + v); }
@@ -103,24 +115,32 @@ public class Vec3f
 	public Vec2f getXZ() { return new Vec2f(x, z); }
 	public Vec2f getZX() { return new Vec2f(z, x); }
 	
-	public void setX(int x) { this.x = x; }
-	public void setY(int y) { this.y = y; }
-	public void setZ(int z) { this.z = z; }
+	public void setX(float x) { this.x = x; }
+	public void setY(float y) { this.y = y; }
+	public void setZ(float z) { this.z = z; }
+	
+	public Vec3f lerpf(Vec3f to, float t)
+	{
+		Vec3f ret = new Vec3f();
+		
+		ret.x = Utils.lerpf(getX(), to.getX(), t);
+		ret.y = Utils.lerpf(getY(), to.getY(), t);
+		ret.z = Utils.lerpf(getZ(), to.getZ(), t);
+		
+		return ret;
+	}
+	
+	public boolean isNull()
+	{
+		
+		return x == 0 && y == 0 && z == 0;
+	}
 	
 	public static void lerpf(Vec3f to, Vec3f v0, Vec3f v1, float t)
 	{
 		to.x = Utils.lerpf(v0.getX(), v1.getX(), t);
 		to.y = Utils.lerpf(v0.getY(), v1.getY(), t);
 		to.z = Utils.lerpf(v0.getZ(), v1.getZ(), t);
-	}
-	public boolean isNull()
-	{
-		return (x + y + z) == 0;
-	}
-	
-	public String toString()
-	{
-		return "[" + x + "] [" + y + "] [" + z + "]";
 	}
 	
 	public static Vec3f getMaxComponents(Vec3f f, Vec3f s)
@@ -139,5 +159,41 @@ public class Vec3f
 				Math.min(f.getZ(), s.getZ())
 				);
 	}
+
+	public Vec3f rand(Random r)
+	{
+		this.x = r.nextFloat();
+		this.y = r.nextFloat();
+		this.z = r.nextFloat();
+		
+		return this;		
+	}
 	
+	public Vec3f rand()
+	{
+		this.x = (float) Math.random();
+		this.y = (float) Math.random();
+		this.z = (float) Math.random();
+		
+		return this;
+	}
+
+	public boolean same(Vec3f pos)
+	{
+		return x == pos.getX() && y == pos.getY() && z == pos.getZ();
+	}
+	
+	public static Vec3f projOnPlane(Vec3f v, Vec3f planeNormal)
+	{
+		return v .sub( 
+						planeNormal.mul ( 
+											((v .dot (planeNormal)) / planeNormal.lengthSquared())
+										) 
+					 );				
+	}
+
+	public String toString()
+	{
+		return "[" + x + "] [" + y + "] [" + z + "]";
+	}
 }

@@ -1,4 +1,4 @@
-package fi.jmak.utils.shader;
+package fi.jmak.shader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,16 +11,16 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
 
-public class Shader
+public class ShaderLoader
 {
 	
 	public static int loadImmediate(String vertexPath, String tcsPath, String tesPath, String geometryPath, String fragmentPath)
 	{
 		int program = GL20.glCreateProgram();
 		
-		loadAttachDelete(program, vertexPath, GL20.GL_VERTEX_SHADER);
-		loadAttachDelete(program, tcsPath, GL40.GL_TESS_CONTROL_SHADER);
-		loadAttachDelete(program, tesPath, GL40.GL_TESS_EVALUATION_SHADER);
+		loadAttachDelete(program, vertexPath,	GL20.GL_VERTEX_SHADER);
+		loadAttachDelete(program, tcsPath, 		GL40.GL_TESS_CONTROL_SHADER);
+		loadAttachDelete(program, tesPath, 		GL40.GL_TESS_EVALUATION_SHADER);
 		loadAttachDelete(program, geometryPath, GL32.GL_GEOMETRY_SHADER);
 		loadAttachDelete(program, fragmentPath, GL20.GL_FRAGMENT_SHADER);
 
@@ -71,7 +71,7 @@ public class Shader
 	
 	private static String loadSrc(String path)
 	{
-		
+
 		try (FileReader freader = new FileReader(new File(path)) ;
 			BufferedReader reader = new BufferedReader(freader))
 		{
@@ -82,7 +82,7 @@ public class Shader
 			{
 				builder.append(line).append("\n");
 			}
-			
+
 			builder.append("\n");
 			
 			return builder.toString();

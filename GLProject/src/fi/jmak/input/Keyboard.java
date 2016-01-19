@@ -26,7 +26,7 @@ public class Keyboard
 			@Override
 			public void invoke(long window, int key, int scancode, int action, int mods)
 			{
-				if (key >= SIZE)
+				if (key < 0 || key >= SIZE)
 					return;
 				
 				if (action == GLFW.GLFW_PRESS)
